@@ -110,7 +110,7 @@ router.get('/torrent/:p',function (req, ress, next) {
     superagent
         .get(urlParse(url))
         .timeout({
-            response: 7000,  // Wait 5 seconds for the server to start sending,
+            response: 10000,  // Wait 5 seconds for the server to start sending,
         })
         .buffer()
         .parse(binaryParser)

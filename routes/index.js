@@ -2,6 +2,7 @@
 var express = require('express');
 var router = express.Router();
 
+const url = 'http://ss.noxxxx.com';
 
 let superagent = require('superagent'), //
 	cheerio = require('cheerio'),    //转成jquery
@@ -86,6 +87,7 @@ router.get('/s/:p', function (req, ress, next) {
 				});
 				ress.render('search', {
 					title: req.params.p.substring(0, req.params.p.indexOf('.')),
+					url: url,
 					total: $('.search-list').html()
 				});
 			}
@@ -121,6 +123,7 @@ router.get('/q/:p', function (req, ress, next) {
 				});
 				ress.render('search', {
 					title: req.params.p.substring(0, req.params.p.indexOf('.')),
+					url: url,
 					total: $('.search-list').html()
 				});
 			}
@@ -157,6 +160,7 @@ router.get('/torrent/:p', function (req, ress, next) {
 				ress.render('detail', {
 					title: $('.res-title').text(),
 					id: res,
+					url: url,
 					total: $('#content').html()
 				});
 			}

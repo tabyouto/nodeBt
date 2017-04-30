@@ -24,11 +24,11 @@ module.exports = {
    */
   deploy : {
     production : {
-      user : 'node',
+      user : 'hhvps4836',
       host : '23.226.78.138',
       ref  : 'origin/master',
-      repo : 'git@github.com:repo.git',
-      path : '/var/www/production',
+      repo : 'git@github.com:tabyouto/nodeBt.git',
+      path : '/home/wwwroot/ss.noxxxx.com/',
       'post-deploy' : 'npm install && pm2 reload ecosystem.config.js --env production'
     },
     dev : {

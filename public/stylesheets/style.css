@@ -36,6 +36,17 @@
 .index-page .logo img {
   width: 100%;
 }
+.index-page ul {
+  margin: 10px 0 0;
+  padding: 0;
+}
+.index-page ul li {
+  display: inline-block;
+  margin-right: 10px;
+}
+.index-page ul li a {
+  color: #999;
+}
 .list-page .search-res-info {
   padding: 5px 0 5px 116px;
   background-color: rgba(0, 0, 0, 0.05);
@@ -70,6 +81,9 @@
 }
 .detail-page .detail-res h1 {
   font-size: 22px;
+}
+.detail-page .detail-res h3 {
+  font-size: 20px;
 }
 .detail-page .detail-res .fileDetail p a {
   margin-right: 5px;

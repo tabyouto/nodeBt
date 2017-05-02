@@ -7,10 +7,10 @@ const originUrl = 'http://ss.noxxxx.com';
 let superagent = require('superagent'), //
 	cheerio = require('cheerio'),    //转成jquery
 	url = require('url'),
-	iconv = require("iconv-lite");  //编码转换
+	iconv = require("iconv-lite"),  //编码转换
 // async       = require('async'), //处理异步回调
 // querystring = require("querystring"),
-// sqlAction   = require("./mysql.js"), //mysql 配置文件
+	sqlAction = require("../common/mysql.js"); //mysql 配置文件
 // info        = require('./_base.js'), //基本配置信息
 // event       = require('../event/_event'),
 // tools       = require('../common/util');
@@ -56,7 +56,12 @@ function parseHtml(data) {
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-	res.render('index', {title: '种子搜索'});
+	sqlAction.query("select words from hotWords", '', function (err, vals, fields) {
+		res.render('index', {
+			title: '种子搜索',
+			hot: vals
+		});
+	});
 });
 
 /**

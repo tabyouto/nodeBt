@@ -21,7 +21,11 @@
                 <span class="input-group-btn"><button class="btn btn-default" type="submit">　search　</button></span>
             </div>
         </form>
-
+        <ul>
+            <% for(var i=0; i< hot.length; i++) {%>
+            <li><a href="/s/<%= hot[i].words %>"><%= hot[i].words %></a></li>
+            <% } %>
+        </ul>
     </div>
 </div>
 

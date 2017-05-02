@@ -62,6 +62,7 @@
 .list-page .search-res .item-list {
   font-size: 13px;
   padding: 4px 0 14px;
+  word-wrap: break-word;
 }
 .list-page .search-res .search-item {
   padding-bottom: 10px;

@@ -58,7 +58,7 @@ function parseHtml(data) {
 router.get('/', function (req, res, next) {
 	sqlAction.query("select words from hotWords", '', function (err, vals, fields) {
 		res.render('index', {
-			title: '种子搜索',
+			title: '最好的BT搜索,海量种子搜索网站-XBT',
 			hot: vals
 		});
 	});

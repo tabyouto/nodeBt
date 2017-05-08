@@ -140,7 +140,7 @@ router.get('/q/:p', function (req, ress, next) {
  * detail 页面
  */
 router.get('/torrent/:p', function (req, ress, next) {
-	let url = 'http://www.sobt5.org/torrent/' + req.params.p;
+	let url = 'http://www.sobt5.org/q/' + req.params.p;
 	superagent
 		.get(urlParse(url))
 		.buffer()

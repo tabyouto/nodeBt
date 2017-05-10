@@ -2,7 +2,7 @@
 var express = require('express');
 var router = express.Router();
 
-const originUrl = 'http://ss.noxxxx.com';
+const originUrl = 'https://www.btyisou.top';
 
 let superagent = require('superagent'), //
 	cheerio = require('cheerio'),    //转成jquery
@@ -171,5 +171,40 @@ router.get('/torrent/:p', function (req, ress, next) {
 			}
 		})
 });
+
+
+
+
+
+
+router.get('/top', function (req, ress, next) {
+	var topUrl = 'http://www.cilisoba.net/top/';
+	header.Host = 'www.cilisoba.net';
+	header.Referer = 'http://www.cilisoba.net';
+	superagent
+		.get(topUrl)
+		//.set(header)
+		.timeout({
+			response: 7000,  // Wait 5 seconds for the server to start sending,
+		})
+		.buffer()
+		.parse(binaryParser)
+		.end(function (err, res) {
+			if (res && res.body) {
+				var $ = cheerio.load(res.body, {decodeEntities: false});
+				//$('ol li').each(function(index,item) {
+				//	console.log($(item).html());
+				//})
+				ress.render('top', {
+					list: $('ol li')
+				});
+			}else {
+				console.log('error')
+			}
+		});
+});
+
+
+
 
 module.exports = router;

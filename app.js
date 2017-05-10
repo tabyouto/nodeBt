@@ -37,7 +37,7 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-const url = 'http://ss.noxxxx.com';
+const url = 'https://www.btyisou.top';
 
 // error handler
 app.use(function(err, req, res, next) {

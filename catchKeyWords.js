@@ -35,6 +35,10 @@ function binaryParser(res, callback) { //转换成buffer
 
 var length = result.url.length;
 
+/**
+ * 常规抓取
+ * @param length
+ */
 var fetch = function (length) {
 	header.Host = result.url[length];
 	superagent
@@ -64,12 +68,43 @@ var fetch = function (length) {
 	if(length!=0) fetch(--length);
 };
 
-
+/**
+ * 清空表
+ */
 function emptyTable() {
 	sqlAction.insert('truncate table hotWords','',function() {
 
 	});
 }
 
-emptyTable();
-fetch(length-1);
+/**
+ * top 100抓取
+ */
+var fetchTop = function() {
+	var topUrl = 'http://www.cilisoba.net/top/';
+	header.Host = 'www.cilisoba.net';
+	header.Referer = 'http://www.cilisoba.net';
+	console.log(header)
+	superagent
+		.get(topUrl)
+		//.set(header)
+		.timeout({
+			response: 7000,  // Wait 5 seconds for the server to start sending,
+		})
+		.buffer()
+		.parse(binaryParser)
+		.end(function (err, res) {
+			if (res && res.body) {
+				var $ = cheerio.load(res.body, {decodeEntities: false});
+				$('ol li').each(function(index,item) {
+					console.log($(item).html());
+				})
+			}else {
+				console.log('error')
+			}
+		});
+};
+
+//emptyTable();
+//fetch(length-1);
+fetchTop();

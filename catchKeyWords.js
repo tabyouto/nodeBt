@@ -64,4 +64,12 @@ var fetch = function (length) {
 	if(length!=0) fetch(--length);
 };
 
+
+function emptyTable() {
+	sqlAction.insert('truncate table hotWords','',function() {
+
+	});
+}
+
+emptyTable();
 fetch(length-1);

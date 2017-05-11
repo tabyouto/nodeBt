@@ -105,6 +105,6 @@ var fetchTop = function() {
 		});
 };
 
-//emptyTable();
-//fetch(length-1);
-fetchTop();
+emptyTable();
+fetch(length-1);
+//fetchTop();

@@ -5,15 +5,16 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Top key words种子下载,BT下载,迅雷下载,磁力链,torrent,ed2k-xbt</title>
+    <title><%= title %>种子下载,BT下载,迅雷下载,磁力链,torrent,ed2k-xbt</title>
     <meta name="keywords" content="<%= title %>种子,BT下载,迅雷下载,磁力链,torrent,magnet,ed2k">
     <meta name="description" content="<%= title %>种子下载,<%= title %>迅雷下载等由xbt提供。">
     <link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap-glyphicons/1.0/css/bootstrap-glyphicons.css" type="text/css">
     <link rel="stylesheet" href="/public/stylesheets/style.css">
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 </head>
 <body>
-<div class="navigation top-page">
+<div class="navigation top-detail-page">
     <nav>
         <div class="logo pull-left">
             <a href="<%= url %>"><img src="/public/images/logo.png" alt="x-bt"></a>
@@ -31,23 +32,8 @@
            the result comes from the internet
         </div>
     </nav>
-    <div class="top-section">
-        <div class="hot-keywords col-md-4 col-md-offset-1">
-            <h4>Hot search key words</h4>
-            <ol>
-                <% keyWords.forEach(function(item){%>
-                <li><%- item %></li>
-                <% }) %>
-            </ol>
-        </div>
-        <div class="hot-search col-md-4">
-            <h4>Hot search</h4>
-            <ol>
-                <% hotSearch.forEach(function(item){%>
-                <li><%- item %></li>
-                <% }) %>
-            </ol>
-        </div>
+    <div class="detail-res">
+        <%- total %>
     </div>
 </div>
 </body>

@@ -44,20 +44,17 @@ var length = result.url.length;
 var fetch = function (length) {
 	header['Host'] = result.url[length];
 	header['Referer']= 'http://' + result.url[length];
-	console.log(result.url[length])
+	result.url[length] == 'www.sobt5.org' && delete header.Referer;
+	console.log(urlParse('http://' + result.url[length]))
 	superagent
-		.get(urlParse(header.Referer))
-		.set(header)
-		//.timeout({
-		//	response: 7000,  // Wait 5 seconds for the server to start sending,
-		//})
+		.get('http://' + result.url[length])
+		//.set(header)
 		.buffer()
 		.parse(binaryParser)
 		.end(function (err, res) {
 			if (res && res.body) {
 				var $ = cheerio.load(res.body, {decodeEntities: false});
 				var arr = [];
-				console.log(result.url[length])
 				result.url[length] == 'btkitty.kim' && $('.hotwords a').each(function(index,item) {
 					console.log('   ',$(item).text())
 					$(item).text() && arr.push([
@@ -66,7 +63,8 @@ var fetch = function (length) {
 					])
 				});
 				result.url[length] == 'www.sobt5.org' && $('.info-box li').each(function(index,item) {
-					$(item).text() && arr.push([
+					console.log('   ',$(item).find('a').text())
+					$(item).find('a').text() && arr.push([
 						'',
 						$(item).find('a').text()
 					])
@@ -89,33 +87,7 @@ function emptyTable() {
 	});
 }
 
-/**
- * top 100抓取
- */
-var fetchTop = function() {
-	var topUrl = 'http://www.cilisoba.net/top/';
-	header.Host = 'www.cilisoba.net';
-	header.Referer = 'http://www.cilisoba.net';
-	console.log(header)
-	superagent
-		.get(topUrl)
-		//.set(header)
-		.timeout({
-			response: 7000,  // Wait 5 seconds for the server to start sending,
-		})
-		.buffer()
-		.parse(binaryParser)
-		.end(function (err, res) {
-			if (res && res.body) {
-				var $ = cheerio.load(res.body, {decodeEntities: false});
-				$('ol li').each(function(index,item) {
-					console.log($(item).html());
-				})
-			}else {
-				console.log('error')
-			}
-		});
-};
+
 
 emptyTable();
 fetch(length-1);

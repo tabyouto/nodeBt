@@ -60,6 +60,12 @@ var fetch = function (length) {
 						$(item).text()
 					])
 				});
+				$('.info-box li').each(function(index,item) {
+					arr.push([
+						'',
+						$(item).find('a').text()
+					])
+				});
 				sqlAction.insert('INSERT REPLACE INTO hotWords (id,words) values ?',[arr],function() {
 
 				});

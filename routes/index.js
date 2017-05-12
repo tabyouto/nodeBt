@@ -13,7 +13,7 @@ let superagent = require('superagent'), //
 	sqlAction = require("../common/mysql.js"), //mysql 配置文件
 // info        = require('./_base.js'), //基本配置信息
 // event       = require('../event/_event'),
- tools       = require('../common/utils');
+	tools = require('../common/utils');
 
 let info = {
 	headers: {
@@ -80,21 +80,30 @@ router.get('/s/:p', function (req, ress, next) {
 		.end(function (err, res) {
 			if (res && res.body) {
 				var $ = cheerio.load(res.body, {decodeEntities: false});
-				$('script').remove();
-				var tmp = '';
-				$('.pagination li').each(function (index, item) {
-					tmp = $(item).find('a').attr('href');
-					if (tmp) {
-						tmp = tmp.substring(tmp.lastIndexOf('/'), tmp.length);
-						$(item).find('a').attr('href', '/s' + tmp);
-					}
+				console.log($.html());
+				if($('.alert-danger').html()) { //关键词过短
+					ress.render('search', {
+						title: '关键词过短',
+						url: originUrl,
+						total: '关键词过短，请重试'
+					});
+				}else {
+					$('script').remove();
+					var tmp = '';
+					$('.pagination li').each(function (index, item) {
+						tmp = $(item).find('a').attr('href');
+						if (tmp) {
+							tmp = tmp.substring(tmp.lastIndexOf('/'), tmp.length);
+							$(item).find('a').attr('href', '/s' + tmp);
+						}
 
-				});
-				ress.render('search', {
-					title: req.params.p.substring(0, req.params.p.indexOf('.')),
-					url: originUrl,
-					total: $('.search-list').html()
-				});
+					});
+					ress.render('search', {
+						title: req.params.p.substring(0, req.params.p.indexOf('.')),
+						url: originUrl,
+						total: $('.search-list').html()
+					});
+				}
 			}
 		})
 });
@@ -148,11 +157,16 @@ router.get('/torrent/:p', function (req, ress, next) {
 		.end(function (err, res) {
 			if (res && res.body) {
 				var $ = cheerio.load(res.body, {decodeEntities: false});
+				console.log($.html())
 				var reg = /\'.*?\'/ig;
-				var res = reg.exec($('script').text())[0];
-				res = res.substring(1, res.length - 1); //查询热度的编号
+				var res = reg.exec($('script').text()) && reg.exec($('script').text())[0];
+				res = res ? res.substring(1, res.length - 1) : null; //查询热度的编号
 				$('script').remove();
 				$('.link_op').remove();
+				$('.search-tips').remove();
+				$('.search-statu').remove();
+				$('.search-list div').removeAttr('style');
+				$('style').remove();
 				var tmp = '';
 				$('.fileDetail p').each(function (index, item) {
 					$(item).find('a').each(function (i, dom) {
@@ -187,7 +201,7 @@ router.get('/top', function (req, ress, next) {
 				var _firstArr = [];
 				var _secondArr = [];
 				$('ol li').each(function (index, item) {
-					index <=50 ? _firstArr.push($(item).html()) : _secondArr.push($(item).html());
+					index <= 50 ? _firstArr.push($(item).html()) : _secondArr.push($(item).html());
 				})
 				ress.render('top', {
 					keyWords: _firstArr,
@@ -206,12 +220,12 @@ router.get('/top', function (req, ress, next) {
  */
 router.get('/search/:key', function (req, ress, next) {
 	var searchUrl = 'http://www.cilisoba.net/search/';
-	if(!tools.isEmptyObject(req.query)) {
+	if (!tools.isEmptyObject(req.query)) {
 		var _query = '';
-		for(var i in req.query) {
+		for (var i in req.query) {
 			_query += i + '=' + req.query[i] + '&';
 		}
-		_query = '/?' + _query.substring(0,_query.length-1);
+		_query = '/?' + _query.substring(0, _query.length - 1);
 	}
 	var getUrl = searchUrl + req.params.key;
 	_query && (getUrl = getUrl + _query);
@@ -249,20 +263,19 @@ router.get('/h/:key', function (req, ress, next) {
 			if (res && res.body) {
 				var $ = cheerio.load(res.body, {decodeEntities: false});
 				var tmp = $.html();
-					tmp = tmp.match(/(\$\.get\()(.*?)\)/ig);
+				tmp = tmp.match(/(\$\.get\()(.*?)\)/ig);
 				tmp = tmp[0].split('=')[2];
-				tmp = tmp.substring(0,tmp.length-2); //获得hashId
+				tmp = tmp.substring(0, tmp.length - 2); //获得hashId
 				$('.magnet-play').remove();
 				$('.x-find-torrent').remove();
 
-				getTorrent(tmp,function(data) {
+				getTorrent(tmp, function (data) {
 					var info = data.result[0];
 					console.log(data);
 
 
-
 					var link1 = 'magnet:' + '?xt=urn' + ':btih:' + info.info_hash;
-					var link2 =  link1 + '&dn=' + encodeURIComponent(info.name);
+					var link2 = link1 + '&dn=' + encodeURIComponent(info.name);
 					var link3 = 'http://pan.bai' + 'du.com/disk/home?ssbc_magnet=' + info.info_hash;
 					var link4 = 'http://www.hao' + 'sou.com/s?q=' + encodeURIComponent(info.name) + '&amp;src=ssbc&amp;ie=utf-8';
 					$('.magnet-link,.magnet-download').attr('href', link2);
@@ -275,8 +288,7 @@ router.get('/h/:key', function (req, ress, next) {
 
 
 					var _tmp = $('body>.container').html();
-					_tmp = _tmp.replace(/cilibaba/gi,'btyisou');
-
+					_tmp = _tmp.replace(/cilibaba/gi, 'btyisou');
 
 
 					ress.render('top-detail', {
@@ -293,15 +305,14 @@ router.get('/h/:key', function (req, ress, next) {
 });
 
 
-
-function getTorrent(id,callback) {
+function getTorrent(id, callback) {
 	var getTorrent = 'http://www.cilisoba.net/api/json_info?hashes=' + id;
 	superagent
 		.get(urlParse(getTorrent))
 		.buffer()
 		.parse(binaryParser)
 		.end(function (err, res) {
-			callback　&& callback(JSON.parse(res.body));
+			callback && callback(JSON.parse(res.body));
 		});
 }
 

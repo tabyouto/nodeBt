@@ -45,8 +45,10 @@
 		        var arr =  $('.last_p a').attr('href').split('_');
 			    $('.search-res-info em').text($('.search-item').length * arr[arr.length-1].split('.')[0]);
 		    }else {
-		    	if($('.search-res-info em')) {
+		    	if($('.search-res-info em') && $('.search-res li').html()) {
 				    $('.search-res-info em').text('10');
+			    }else {
+				    $('.search-res-info em').text('0');
 			    }
 		    }
 	    }

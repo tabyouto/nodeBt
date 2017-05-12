@@ -113,7 +113,7 @@ router.get('/s/:p', function (req, ress, next) {
  * 关联搜索 页面
  */
 router.get('/q/:p', function (req, ress, next) {
-	let url = 'http://www.sobt5.org/q/' + req.params.p + '.html';
+	let url = 'http://www.sobt5.org/q/' + req.params.p;
 	info.headers.Referer = urlParse(url);
 	superagent
 		.get(info.headers.Referer)
@@ -149,9 +149,11 @@ router.get('/q/:p', function (req, ress, next) {
  * detail 页面
  */
 router.get('/torrent/:p', function (req, ress, next) {
-	let url = 'http://www.sobt5.org/q/' + req.params.p;
+	let url = 'http://www.sobt5.org/torrent/' + req.params.p;
+	info.headers.Referer = urlParse(url);
 	superagent
 		.get(urlParse(url))
+		.set(info.headers)
 		.buffer()
 		.parse(binaryParser)
 		.end(function (err, res) {
@@ -191,8 +193,11 @@ router.get('/torrent/:p', function (req, ress, next) {
  */
 router.get('/top', function (req, ress, next) {
 	var topUrl = 'http://www.cilisoba.net/top';
+	info.headers.Host = 'www.cilisoba.net';
+	delete info.headers.Referer;
 	superagent
 		.get(urlParse(topUrl))
+		.set(info.headers)
 		.buffer()
 		.parse(binaryParser)
 		.end(function (err, res) {
@@ -201,16 +206,18 @@ router.get('/top', function (req, ress, next) {
 				var _firstArr = [];
 				var _secondArr = [];
 				$('ol li').each(function (index, item) {
-					index <= 50 ? _firstArr.push($(item).html()) : _secondArr.push($(item).html());
+					console.log(index);
+					index < 50 ? _firstArr.push($(item).html()) : _secondArr.push($(item).html());
 				})
 				ress.render('top', {
 					keyWords: _firstArr,
 					hotSearch: _secondArr,
+					//test: $('.col-md-4 ol').html(),
 					url: originUrl,
-					title: 'rtewt'
+					title: 'top key'
 				});
 			} else {
-				console.log('error')
+				console.log('获取cilisoba top 失败')
 			}
 		});
 });
@@ -231,6 +238,7 @@ router.get('/search/:key', function (req, ress, next) {
 	_query && (getUrl = getUrl + _query);
 	superagent
 		.get(urlParse(getUrl))
+		.set(info.headers)
 		.buffer()
 		.parse(binaryParser)
 		.end(function (err, res) {
@@ -244,7 +252,7 @@ router.get('/search/:key', function (req, ress, next) {
 					pagination: $('.pagination').html()
 				});
 			} else {
-				console.log('error')
+				console.log('列表跳转失败')
 			}
 		});
 });

@@ -31,7 +31,9 @@ function binaryParser(res, callback) { //转换成buffer
 		callback(null, new Buffer(res.data, 'binary'));
 	});
 }
-
+function urlParse(url) {
+	return encodeURI(url);
+}
 
 var length = result.url.length;
 
@@ -40,19 +42,22 @@ var length = result.url.length;
  * @param length
  */
 var fetch = function (length) {
-	header.Host = result.url[length];
+	header['Host'] = result.url[length];
+	header['Referer']= 'http://' + result.url[length];
+	console.log(result.url[length])
 	superagent
-		.get('http://'+ result.url[length])
+		.get(urlParse(header.Referer))
 		.set(header)
-		.timeout({
-			response: 7000,  // Wait 5 seconds for the server to start sending,
-		})
+		//.timeout({
+		//	response: 7000,  // Wait 5 seconds for the server to start sending,
+		//})
 		.buffer()
 		.parse(binaryParser)
 		.end(function (err, res) {
 			if (res && res.body) {
 				var $ = cheerio.load(res.body, {decodeEntities: false});
 				var arr = [];
+				console.log(result.url[length])
 				result.url[length] == 'btkitty.kim' && $('.hotwords a').each(function(index,item) {
 					console.log('   ',$(item).text())
 					$(item).text() && arr.push([
@@ -67,11 +72,12 @@ var fetch = function (length) {
 					])
 				});
 				sqlAction.insert('INSERT REPLACE INTO hotWords (id,words) values ?',[arr],function() {
-
 				});
+			}else {
+				console.log('抓取失败')
 			}
+			if(length>0) fetch(--length);
 		});
-	if(length!=0) fetch(--length);
 };
 
 /**

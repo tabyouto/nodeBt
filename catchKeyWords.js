@@ -53,15 +53,15 @@ var fetch = function (length) {
 			if (res && res.body) {
 				var $ = cheerio.load(res.body, {decodeEntities: false});
 				var arr = [];
-				$('.hotwords a').each(function(index,item) {
+				result.url[length] == 'btkitty.kim' && $('.hotwords a').each(function(index,item) {
 					console.log('   ',$(item).text())
-					arr.push([
+					$(item).text() && arr.push([
 						'',
 						$(item).text()
 					])
 				});
-				$('.info-box li').each(function(index,item) {
-					arr.push([
+				result.url[length] == 'www.sobt5.org' && $('.info-box li').each(function(index,item) {
+					$(item).text() && arr.push([
 						'',
 						$(item).find('a').text()
 					])

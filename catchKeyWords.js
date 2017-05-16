@@ -71,10 +71,10 @@ var fetch = function (length) {
 				});
 				sqlAction.insert('INSERT REPLACE INTO hotWords (id,words) values ?',[arr],function() {
 				});
+				if(length>0) fetch(--length);
 			}else {
 				console.log('抓取失败')
 			}
-			if(length>0) fetch(--length);
 		});
 };
 
@@ -90,5 +90,7 @@ function emptyTable() {
 
 
 emptyTable();
-fetch(length-1);
+setTimeout(function() {
+	fetch(length-1);
+},1000);
 //fetchTop();

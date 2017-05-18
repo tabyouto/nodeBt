@@ -159,7 +159,6 @@ router.get('/torrent/:p', function (req, ress, next) {
 		.end(function (err, res) {
 			if (res && res.body) {
 				var $ = cheerio.load(res.body, {decodeEntities: false});
-				console.log($.html())
 				var reg = /\'.*?\'/ig;
 				var res = reg.exec($('script').text()) && reg.exec($('script').text())[0];
 				res = res ? res.substring(1, res.length - 1) : null; //查询热度的编号

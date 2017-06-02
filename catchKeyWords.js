@@ -48,7 +48,6 @@ var fetch = function (length) {
 	console.log(urlParse('http://' + result.url[length]))
 	superagent
 		.get('http://' + result.url[length])
-		//.set(header)
 		.buffer()
 		.parse(binaryParser)
 		.end(function (err, res) {
@@ -56,14 +55,12 @@ var fetch = function (length) {
 				var $ = cheerio.load(res.body, {decodeEntities: false});
 				var arr = [];
 				result.url[length] == 'btkitty.kim' && $('.hotwords a').each(function(index,item) {
-					console.log('   ',$(item).text())
 					$(item).text() && arr.push([
 						'',
 						$(item).text()
 					])
 				});
 				result.url[length] == 'www.sobt5.org' && $('.info-box li').each(function(index,item) {
-					console.log('   ',$(item).find('a').text())
 					$(item).find('a').text() && arr.push([
 						'',
 						$(item).find('a').text()

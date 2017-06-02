@@ -80,7 +80,6 @@ router.get('/s/:p', function (req, ress, next) {
 		.end(function (err, res) {
 			if (res && res.body) {
 				var $ = cheerio.load(res.body, {decodeEntities: false});
-				console.log($.html());
 				if($('.alert-danger').html()) { //关键词过短
 					ress.render('search', {
 						title: '关键词过短',
@@ -205,7 +204,6 @@ router.get('/top', function (req, ress, next) {
 				var _firstArr = [];
 				var _secondArr = [];
 				$('ol li').each(function (index, item) {
-					console.log(index);
 					index < 50 ? _firstArr.push($(item).html()) : _secondArr.push($(item).html());
 				})
 				ress.render('top', {
@@ -278,7 +276,6 @@ router.get('/h/:key', function (req, ress, next) {
 
 				getTorrent(tmp, function (data) {
 					var info = data.result[0];
-					console.log(data);
 
 
 					var link1 = 'magnet:' + '?xt=urn' + ':btih:' + info.info_hash;
